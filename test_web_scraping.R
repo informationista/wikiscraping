@@ -28,13 +28,11 @@ get_data <- function(year, month, url){
     day <- read_html(as.character(url)) %>% html_nodes(xpath =  '//h3') %>% html_text()
     day <- gsub("\\[edit\\]", "", day) %>% as.numeric(as.character(day)) #remove the edit text and non-numerics
     day <- day[!is.na(day)] #get rid of NAs introduced in last part
-   df_mid <- data.frame(year, month, day, "death")
-   df_mid$death <- as.character(df_mid$X.death.)
-   df_mid <- df_mid[, -4] ##fix the data frame so it can take the character input from death
-  death <- read_html(as.character(url)) %>%  html_nodes("div#mw-content-text.mw-content-ltr") %>% html_nodes("ul") %>% html_text()
-  death <- death[c(-1, -2)] #remove the extraneous content
-  for (i in 1:nrow(df_mid)){
-    df_mid[i, 4] <- as.character(death[i])
+    df_mid <- data.frame(year, month, day, death = as.character(length(day)), stringsAsFactors = FALSE)
+    death <- read_html(as.character(url)) %>%  html_nodes("div#mw-content-text.mw-content-ltr") %>% html_nodes("ul") %>% html_text()
+    death <- death[c(-1, -2)] #remove the extraneous content
+    for (i in 1:nrow(df_mid)){
+      df_mid[i, 4] <- as.character(death[i])
   }
   return(df_mid)
 }
