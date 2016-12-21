@@ -45,8 +45,6 @@ for (i in 1:nrow(df)){
 }
 
 ##Now to clean up the death data
-#remove citation links at end of line
-df_data$death <- gsub("\\[[0-9]*\\]", "", df_data$death)
 
 ##split each person into their own line
 df_data <- df_data %>% mutate(death = strsplit(as.character(death), "\n")) %>% unnest(death)
