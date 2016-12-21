@@ -1,7 +1,7 @@
 library(rvest)
 library(RCurl)
 library(plyr)
-library(tidry)
+library(tidyr)
 library(ggplot2)
 
 ##create a list of URLs to retrieve
