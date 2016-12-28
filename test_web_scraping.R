@@ -1,12 +1,13 @@
 library(rvest)
 library(RCurl)
 library(plyr)
-library(tidry)
+library(tidyr)
 library(ggplot2)
+library(httr)
 
 ##create a list of URLs to retrieve
 ##create the list of years of interest
-year_list <- as.list(c(2004:2016))
+year_list <- as.list(c(2006:2016))
 
 url_df <- function(year){
   url <- paste("https://en.wikipedia.org/wiki/Deaths_in_", month.name, "_", year, sep = "")
@@ -39,6 +40,7 @@ get_data <- function(year, month, url){
   return(df_mid)
 }
 
+
 ##use the get day function to retrieve all data for all years/months in the list
 df_data <- data.frame()
 for (i in 1:nrow(df)){
@@ -66,7 +68,19 @@ cleaned_df$age <- as.numeric(as.character(cleaned_df$age))
 cleaned_df$month <- factor(cleaned_df$month, levels = month.name)
 
 
-##Let's make some charts!
-qplot(year, data = cleaned_df, geom = "bar")
+##Part Two - Quantifying Fame
+
+##this function searches google for the name and returns the number of results
+google_count <- function(term, key, engineID) {
+  library(httr)
+  term <- gsub(" ", "+", term)
+  query <- paste("https://www.googleapis.com/customsearch/v1?key=", key, "&cx=", engineID, "&q=", term, sep= "")
+  results <- content(GET(query))
+  return(results$queries$request[[1]]$totalResults)
+  Sys.sleep(20)
+}
+
+#do the search for all the names
+cleaned_df$raw_google_results <- lapply(cleaned_df$name, google_count, key = myKey, engineID = engineID)
 
 
