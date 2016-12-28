@@ -12,9 +12,7 @@ I used Wikipedia's lists of deaths of notable people from 2006 to
 present. After discarding incomplete data, this left me with 52,101
 people.
 
-    ## Warning: package 'ggplot2' was built under R version 3.1.3
-
-![](README_files/figure-markdown_strict/unnamed-chunk-1-1.png)
+![](images/by_year.jpg)
 
 As you can see, 2016 *does* in fact have the most deaths, with 6,553
 notable people having died so far. In fact, I ran this analysis on
@@ -32,7 +30,7 @@ only five years old) suggests that this is probably the case.
 
 By the way, in case you were wondering what the deadliest month is for
 notable pepole, it's January.
-![](README_files/figure-markdown_strict/unnamed-chunk-2-1.png)
+![](images/by_month.jpg)
 
 So we now know that in fact more notable people did die in 2016 than
 usual. I think another reason 2016 seems so awful is that many *very*
