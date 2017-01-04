@@ -4,6 +4,7 @@ library(plyr)
 library(tidyr)
 library(ggplot2)
 library(httr)
+library(dplyr)
 
 ##create a list of URLs to retrieve
 ##create the list of years of interest
@@ -64,19 +65,19 @@ cleaned_df$age <- as.numeric(as.character(cleaned_df$age))
 cleaned_df$month <- factor(cleaned_df$month, levels = month.name)
 
 
-##Part Two - Quantifying Fame
-
-##this function searches google for the name and returns the number of results
-google_count <- function(term, key, engineID) {
-  library(httr)
-  term <- gsub(" ", "+", term)
-  query <- paste("https://www.googleapis.com/customsearch/v1?key=", key, "&cx=", engineID, "&q=", term, sep= "")
-  results <- content(GET(query))
-  return(results$queries$request[[1]]$totalResults)
-  Sys.sleep(20)
-}
-
-#do the search for all the names
-cleaned_df$raw_google_results <- lapply(cleaned_df$name, google_count, key = myKey, engineID = engineID)
+##Some visualizations
+#create a style to use in all charts
+style <- theme(plot.title = element_text(size = 20, face = "bold"), text = element_text(family = "serif"))
 
 
+##create a chart of deaths by year
+ggplot(cleaned_df, aes(x = as.factor(year))) + geom_bar(fill = "skyblue", color = "black") + xlab("Year") + ylab("Number of deaths") + ggtitle("Deaths of Notable People on Wikipedia, 2006 - 2016") + style
+
+##chart of deaths by month, all years
+ggplot(cleaned_df, aes(x = month)) + geom_bar(fill = "khaki1", color = "black") + xlab("Month") + ylab("Number of deaths") + ggtitle("Deaths of Notable People on Wikipedia by Month, 2006 - 2016") + style
+
+##boxplot of age at death
+ggplot(cleaned_df, aes(x = as.factor(year), y = age)) + geom_boxplot(outlier.colour = "red") + style + ggtitle("Age at Death of Notable People on Wikipedia by Year") + xlab("Year") + ylab("Age at Death")
+
+##get summary data about age at death
+mean_age <- with(cleaned_df, aggregate(list(age), by = list(year), FUN = function(x) mean(x, na.rm = TRUE)))
